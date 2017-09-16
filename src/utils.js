@@ -1,4 +1,7 @@
-import { LS_ACCESS_TOKEN_KEY } from './constants'
+import { 
+  LS_ACCESS_TOKEN_KEY,
+  CODING_URL,
+} from './constants'
 
 export const isString = s => toString.call(s) === '[object String]'
 
@@ -37,11 +40,14 @@ export const Query = {
 }
 
 function ajaxFactory(method) {
-  return function(apiPath, data = {}, base = 'https://api.github.com') {
+  return function(apiPath, data = {}, base = CODING_URL.base) {
     const req = new XMLHttpRequest()
     const token = localStorage.getItem(LS_ACCESS_TOKEN_KEY)
 
-    let url = `${base}${apiPath}`
+    let url = apiPath;
+    if (!url.startsWith('https://') && !url.startsWith('http://')) {
+        url = `${base}${url}`
+    }
     let body = null
     if (method === 'GET' || method === 'DELETE') {
       url += Query.stringify(data)
@@ -56,19 +62,30 @@ function ajaxFactory(method) {
           return
         }
         const data = req.responseText ? JSON.parse(res) : {}
-        if (data.message) {
-          reject(new Error(data.message))
+        if (data.msg ) {
+          reject(new Error(JSON.stringify(data.msg)))
         } else {
-          resolve(data)
+          if (data.code !== undefined) {
+              if (data.code) {
+                  reject(new Error(JSON.stringify(data.code)))
+              } else {
+                  resolve(data.data)
+              }
+          } else {
+              resolve(data)
+          }
         }
       })
       req.addEventListener('error', error => reject(error))
     })
     req.open(method, url, true)
 
-    req.setRequestHeader('Accept', 'application/vnd.github.squirrel-girl-preview, application/vnd.github.html+json')
-    if (token) {
-      req.setRequestHeader('Authorization', `token ${token}`)
+    req.setRequestHeader('Accept', 'application/vnd.github.squirrel-girl-preview, application/vnd.github.html+json, application/json')
+    if (!url.startsWith('https://api.github.com')) {
+        req.setRequestHeader('X-API-VERSION', 'v2')
+        if (token) {
+            req.setRequestHeader('Authorization', `access_token ${token}`)
+        }
     }
     if (method !== 'GET' && method !== 'DELETE') {
       body = JSON.stringify(data)
