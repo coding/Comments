@@ -134,7 +134,7 @@ a.gitment-header-issue-link:hover {
 .gitment-editor-avatar svg {
   width: 44px;
   height: 44px;
-  border-radius: 3px;
+  border-radius: 32px;
 }
 
 .gitment-editor-avatar .gitment-github-icon {
