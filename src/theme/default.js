@@ -1,4 +1,4 @@
-import { github as githubIcon, heart as heartIcon, spinner as spinnerIcon } from '../icons'
+import { coding as codingIcon, heart as heartIcon, spinner as spinnerIcon } from '../icons'
 import { NOT_INITIALIZED_ERROR } from '../constants'
 
 function renderHeader({ meta, user, reactions }, instance) {
@@ -186,7 +186,7 @@ function renderEditor({ user, error }, instance) {
         : user.isLoggingIn
           ? `<div class="gitment-editor-avatar">${spinnerIcon}</div>`
           : `<a class="gitment-editor-avatar" href="${instance.loginLink}" title="login with Coding.net">
-              ${githubIcon}
+              ${codingIcon}
             </a>`
       }
     </a>
@@ -215,8 +215,8 @@ function renderEditor({ user, error }, instance) {
       </div>
     </div>
     <div class="gitment-editor-footer">
-      <a class="gitment-editor-footer-tip" href="https://guides.github.com/features/mastering-markdown/" target="_blank">
-        Styling with Markdown is supported
+      <a class="gitment-editor-footer-tip" href="https://github.com/Coding/Comments" target="_blank">
+      Powered by Coding Comments
       </a>
       <button class="gitment-editor-submit" title="${disabledTip}" ${shouldDisable}>Comment</button>
     </div>
@@ -294,8 +294,8 @@ function renderFooter() {
   container.className = 'gitment-container gitment-footer-container'
   container.innerHTML = `
     Powered by
-    <a class="gitment-footer-project-link" href="https://github.com/imsun/gitment" target="_blank">
-      Gitment
+    <a class="gitment-footer-project-link" href="https://github.com/Coding/Comments" target="_blank">
+      Coding Comments
     </a>
   `
   return container
@@ -308,7 +308,7 @@ function render(state, instance) {
   container.appendChild(instance.renderHeader(state, instance))
   container.appendChild(instance.renderComments(state, instance))
   container.appendChild(instance.renderEditor(state, instance))
-  container.appendChild(instance.renderFooter(state, instance))
+  // container.appendChild(instance.renderFooter(state, instance))
   return container
 }
 
