@@ -55,7 +55,7 @@ class Gitment {
     this.useTheme(defaultTheme)
 
     Object.assign(this, {
-      id: window.location.href,
+      id: window.location.href.split('?')[0],
       title: window.document.title,
       link: window.location.href,
       desc: '',
@@ -100,7 +100,7 @@ class Gitment {
       history.replaceState({}, '', replacedUrl)
 
       Object.assign(this, {
-        id: replacedUrl,
+        id: replacedUrl.split('?')[0],
         link: replacedUrl,
       }, options)
 
@@ -160,7 +160,7 @@ class Gitment {
 
     return http.post(`/api/user/${owner}/project/${repo}/topics`, {
       title,
-      labels: labels.concat(['gitment', id.split('?')[0]]),
+      labels: labels.concat(['gitment', id]),
       content: `${link}\n\n${desc}`,
     })
       .then((meta) => {

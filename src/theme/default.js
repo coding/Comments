@@ -15,12 +15,14 @@ function renderHeader({ meta, user, reactions }, instance) {
   `
   container.appendChild(commentsCount)
 
-  const issueLink = document.createElement('a')
-  issueLink.className = 'gitment-header-issue-link'
-  issueLink.href = meta.html_url
-  issueLink.target = '_blank'
-  issueLink.innerText = 'Discuss Page'
-  container.appendChild(issueLink)
+  if (meta.html_url) {
+    const issueLink = document.createElement('a')
+    issueLink.className = 'gitment-header-issue-link'
+    issueLink.href = meta.html_url
+    issueLink.target = '_blank'
+    issueLink.innerText = 'Discuss Page'
+    container.appendChild(issueLink)
+  }
 
   return container
 }
