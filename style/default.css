@@ -35,6 +35,10 @@
   animation: gitment-spin 1s steps(12) infinite;
 }
 
+.gitment-container .gitment-comments-container {
+  padding-top: 20px;
+}
+
 @-webkit-keyframes gitment-spin {
   100% {
     -webkit-transform: rotate(360deg);
@@ -130,7 +134,7 @@ a.gitment-header-issue-link:hover {
 .gitment-editor-avatar svg {
   width: 44px;
   height: 44px;
-  border-radius: 3px;
+  border-radius: 32px;
 }
 
 .gitment-editor-avatar .gitment-github-icon {
@@ -199,7 +203,7 @@ a.gitment-comment-name:visited {
   margin-left: -1px;
 }
 
-.gitment-editor-tab {
+button.gitment-editor-tab {
   display: inline-block;
   padding: 11px 12px;
   font-size: 14px;

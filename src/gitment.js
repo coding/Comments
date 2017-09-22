@@ -1,10 +1,15 @@
 import { autorun, observable } from 'mobx'
 
-import { LS_ACCESS_TOKEN_KEY, LS_USER_KEY, NOT_INITIALIZED_ERROR } from './constants'
+import {
+  LS_ACCESS_TOKEN_KEY,
+  LS_USER_KEY,
+  NOT_INITIALIZED_ERROR,
+  CODING_URL,
+} from './constants'
 import { getTargetContainer, http, Query } from './utils'
 import defaultTheme from './theme/default'
 
-const scope = 'public_repo'
+const scope = 'project:topics,user'
 
 function extendRenderer(instance, renderer) {
   instance[renderer] = (container) => {
@@ -33,12 +38,13 @@ class Gitment {
   }
 
   get loginLink() {
-    const oauthUri = 'https://github.com/login/oauth/authorize'
+    const oauthUri = CODING_URL.oauth
     const redirect_uri = this.oauth.redirect_uri || window.location.href
 
     const oauthParams = Object.assign({
       scope,
       redirect_uri,
+      response_type: 'code',
     }, this.oauth)
 
     return `${oauthUri}${Query.stringify(oauthParams)}`
@@ -49,7 +55,7 @@ class Gitment {
     this.useTheme(defaultTheme)
 
     Object.assign(this, {
-      id: window.location.href,
+      id: window.location.href.split('?')[0],
       title: window.document.title,
       link: window.location.href,
       desc: '',
@@ -94,17 +100,18 @@ class Gitment {
       history.replaceState({}, '', replacedUrl)
 
       Object.assign(this, {
-        id: replacedUrl,
+        id: replacedUrl.split('?')[0],
         link: replacedUrl,
       }, options)
 
       this.state.user.isLoggingIn = true
-      http.post('https://gh-oauth.imsun.net', {
+      http.post(CODING_URL.access_token, {
           code,
           client_id,
           client_secret,
         }, '')
         .then(data => {
+          console.log(data)
           this.accessToken = data.access_token
           this.update()
         })
@@ -136,14 +143,13 @@ class Gitment {
   update() {
     return Promise.all([this.loadMeta(), this.loadUserInfo()])
       .then(() => Promise.all([
-        this.loadComments().then(() => this.loadCommentReactions()),
-        this.loadReactions(),
+        this.loadComments()
       ]))
       .catch(e => this.state.error = e)
   }
 
   markdown(text) {
-    return http.post('/markdown', {
+    return http.post('https://api.github.com/markdown', {
       text,
       mode: 'gfm',
     })
@@ -152,10 +158,10 @@ class Gitment {
   createIssue() {
     const { id, owner, repo, title, link, desc, labels } = this
 
-    return http.post(`/repos/${owner}/${repo}/issues`, {
+    return http.post(`/api/user/${owner}/project/${repo}/topics`, {
       title,
       labels: labels.concat(['gitment', id]),
-      body: `${link}\n\n${desc}`,
+      content: `${link}\n\n${desc}`,
     })
       .then((meta) => {
         this.state.meta = meta
@@ -169,22 +175,23 @@ class Gitment {
     return this.loadMeta()
   }
 
-  post(body) {
+  post(content) {
     return this.getIssue()
-      .then(issue => http.post(issue.comments_url, { body }, ''))
+      .then(issue => http.post(issue.comments_url, { content }, ''))
       .then(data => {
         this.state.meta.comments++
         const pageCount = Math.ceil(this.state.meta.comments / this.perPage)
         if (this.state.currentPage === pageCount) {
           this.state.comments.push(data)
         }
+        this.update()
         return data
       })
   }
 
   loadMeta() {
     const { id, owner, repo } = this
-    return http.get(`/repos/${owner}/${repo}/issues`, {
+    return http.get(`/api/user/${owner}/project/${repo}/topics`, {
         creator: owner,
         labels: id,
       })
@@ -197,9 +204,9 @@ class Gitment {
 
   loadComments(page = this.state.currentPage) {
     return this.getIssue()
-      .then(issue => http.get(issue.comments_url, { page, per_page: this.perPage }, ''))
+      .then(issue => http.get(issue.comments_url, { page, pageSize: this.perPage }, ''))
       .then((comments) => {
-        this.state.comments = comments
+        this.state.comments = comments.list
         return comments
       })
   }
@@ -210,53 +217,16 @@ class Gitment {
       return Promise.resolve({})
     }
 
-    return http.get('/user')
+    return http.get('/api/account/current_user')
       .then((user) => {
+        user.login = user.global_key
+        user.avatar_url = user.avatar
+        if (user.avatar_url.startsWith('/')) {
+          user.avatar_url = 'https://coding.net' + user.avatar_url;
+        }
         this.state.user = user
         localStorage.setItem(LS_USER_KEY, JSON.stringify(user))
         return user
-      })
-  }
-
-  loadReactions() {
-    if (!this.accessToken) {
-      this.state.reactions = []
-      return Promise.resolve([])
-    }
-
-    return this.getIssue()
-      .then((issue) => {
-        if (!issue.reactions.total_count) return []
-        return http.get(issue.reactions.url, {}, '')
-      })
-      .then((reactions) => {
-        this.state.reactions = reactions
-        return reactions
-      })
-  }
-
-  loadCommentReactions() {
-    if (!this.accessToken) {
-      this.state.commentReactions = {}
-      return Promise.resolve([])
-    }
-
-    const comments = this.state.comments
-    const comentReactions = {}
-
-    return Promise.all(comments.map((comment) => {
-      if (!comment.reactions.total_count) return []
-
-      const { owner, repo } = this
-      return http.get(`/repos/${owner}/${repo}/issues/comments/${comment.id}/reactions`, {})
-    }))
-      .then(reactionsArray => {
-        comments.forEach((comment, index) => {
-          comentReactions[comment.id] = reactionsArray[index]
-        })
-        this.state.commentReactions = comentReactions
-
-        return comentReactions
       })
   }
 
@@ -276,66 +246,28 @@ class Gitment {
     return this.loadComments(page)
   }
 
-  like() {
-    if (!this.accessToken) {
-      alert('Login to Like')
-      return Promise.reject()
-    }
-
-    const { owner, repo } = this
-
-    return http.post(`/repos/${owner}/${repo}/issues/${this.state.meta.number}/reactions`, {
-      content: 'heart',
-    })
-      .then(reaction => {
-        this.state.reactions.push(reaction)
-        this.state.meta.reactions.heart++
-      })
-  }
-
-  unlike() {
-    if (!this.accessToken) return Promise.reject()
-
-
-    const { user, reactions } = this.state
-    const index = reactions.findIndex(reaction => reaction.user.login === user.login)
-    return http.delete(`/reactions/${reactions[index].id}`)
-      .then(() => {
-        reactions.splice(index, 1)
-        this.state.meta.reactions.heart--
-      })
-  }
-
   likeAComment(commentId) {
     if (!this.accessToken) {
       alert('Login to Like')
       return Promise.reject()
     }
 
-    const { owner, repo } = this
-    const comment = this.state.comments.find(comment => comment.id === commentId)
+    return http.post(`${this.state.meta.comments_url}/${commentId}/upvote`)
+      .then(() => {
+        return this.update()
 
-    return http.post(`/repos/${owner}/${repo}/issues/comments/${commentId}/reactions`, {
-      content: 'heart',
-    })
-      .then(reaction => {
-        this.state.commentReactions[commentId].push(reaction)
-        comment.reactions.heart++
       })
   }
 
   unlikeAComment(commentId) {
     if (!this.accessToken) return Promise.reject()
 
-    const reactions = this.state.commentReactions[commentId]
     const comment = this.state.comments.find(comment => comment.id === commentId)
-    const { user } = this.state
-    const index = reactions.findIndex(reaction => reaction.user.login === user.login)
+      console.log(comment)
 
-    return http.delete(`/reactions/${reactions[index].id}`)
+    return http.delete(`${this.state.meta.comments_url}/${commentId}/upvote`)
       .then(() => {
-        reactions.splice(index, 1)
-        comment.reactions.heart--
+        return this.update()
       })
   }
 }

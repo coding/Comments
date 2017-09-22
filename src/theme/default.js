@@ -1,36 +1,10 @@
-import { github as githubIcon, heart as heartIcon, spinner as spinnerIcon } from '../icons'
+import { coding as codingIcon, heart as heartIcon, spinner as spinnerIcon } from '../icons'
 import { NOT_INITIALIZED_ERROR } from '../constants'
 
 function renderHeader({ meta, user, reactions }, instance) {
   const container = document.createElement('div')
   container.lang = "en-US"
   container.className = 'gitment-container gitment-header-container'
-
-  const likeButton = document.createElement('span')
-  const likedReaction = reactions.find(reaction => (
-    reaction.content === 'heart' && reaction.user.login === user.login
-  ))
-  likeButton.className = 'gitment-header-like-btn'
-  likeButton.innerHTML = `
-    ${heartIcon}
-    ${ likedReaction
-      ? 'Unlike'
-      : 'Like'
-    }
-    ${ meta.reactions && meta.reactions.heart
-      ? ` • <strong>${meta.reactions.heart}</strong> Liked`
-      : ''
-    }
-  `
-
-  if (likedReaction) {
-    likeButton.classList.add('liked')
-    likeButton.onclick = () => instance.unlike()
-  } else {
-    likeButton.classList.remove('liked')
-    likeButton.onclick = () => instance.like()
-  }
-  container.appendChild(likeButton)
 
   const commentsCount = document.createElement('span')
   commentsCount.innerHTML = `
@@ -41,12 +15,14 @@ function renderHeader({ meta, user, reactions }, instance) {
   `
   container.appendChild(commentsCount)
 
-  const issueLink = document.createElement('a')
-  issueLink.className = 'gitment-header-issue-link'
-  issueLink.href = meta.html_url
-  issueLink.target = '_blank'
-  issueLink.innerText = 'Issue Page'
-  container.appendChild(issueLink)
+  if (meta.html_url) {
+    const issueLink = document.createElement('a')
+    issueLink.className = 'gitment-header-issue-link'
+    issueLink.href = meta.html_url
+    issueLink.target = '_blank'
+    issueLink.innerText = 'Discuss Page'
+    container.appendChild(issueLink)
+  }
 
   return container
 }
@@ -101,34 +77,30 @@ function renderComments({ meta, comments, commentReactions, currentPage, user, e
 
   comments.forEach(comment => {
     const createDate = new Date(comment.created_at)
-    const updateDate = new Date(comment.updated_at)
     const commentItem = document.createElement('li')
     commentItem.className = 'gitment-comment'
     commentItem.innerHTML = `
-      <a class="gitment-comment-avatar" href="${comment.user.html_url}" target="_blank">
-        <img class="gitment-comment-avatar-img" src="${comment.user.avatar_url}"/>
+      <a class="gitment-comment-avatar" href="https://coding.net${comment.owner.path}" target="_blank">
+        <img class="gitment-comment-avatar-img" src="${comment.owner.avatar.startsWith('http') ? comment.owner.avatar : 'https://coding.net'+comment.owner.avatar}"/>
       </a>
       <div class="gitment-comment-main">
         <div class="gitment-comment-header">
-          <a class="gitment-comment-name" href="${comment.user.html_url}" target="_blank">
-            ${comment.user.login}
+          <a class="gitment-comment-name" href="https://coding.net${comment.owner.path}" target="_blank">
+            ${comment.owner.name}
           </a>
           commented on
           <span title="${createDate}">${createDate.toDateString()}</span>
-          ${ createDate.toString() !== updateDate.toString()
-            ? ` • <span title="comment was edited at ${updateDate}">edited</span>`
-            : ''
-          }
-          <div class="gitment-comment-like-btn">${heartIcon} ${comment.reactions.heart || ''}</div>
+          <div class="gitment-comment-like-btn">${heartIcon} ${comment.up_vote_counts || ''}</div>
         </div>
-        <div class="gitment-comment-body gitment-markdown">${comment.body_html}</div>
+        <div class="gitment-comment-body gitment-markdown">${comment.content}</div>
       </div>
     `
     const likeButton = commentItem.querySelector('.gitment-comment-like-btn')
-    const likedReaction = commentReactions[comment.id]
-      && commentReactions[comment.id].find(reaction => (
-        reaction.content === 'heart' && reaction.user.login === user.login
+    const likedReaction = comment.up_vote_users
+      && comment.up_vote_users.find(likeUser => (
+            likeUser.global_key === user.global_key
       ))
+
     if (likedReaction) {
       likeButton.classList.add('liked')
       likeButton.onclick = () => instance.unlikeAComment(comment.id)
@@ -210,13 +182,13 @@ function renderEditor({ user, error }, instance) {
   const disabledTip = user.login ? '' : 'Login to Comment'
   container.innerHTML = `
       ${ user.login
-        ? `<a class="gitment-editor-avatar" href="${user.html_url}" target="_blank">
+        ? `<a class="gitment-editor-avatar" href="https://coding.net${user.path}" target="_blank">
             <img class="gitment-editor-avatar-img" src="${user.avatar_url}"/>
           </a>`
         : user.isLoggingIn
           ? `<div class="gitment-editor-avatar">${spinnerIcon}</div>`
-          : `<a class="gitment-editor-avatar" href="${instance.loginLink}" title="login with GitHub">
-              ${githubIcon}
+          : `<a class="gitment-editor-avatar" href="${instance.loginLink}" title="login with Coding.net">
+              ${codingIcon}
             </a>`
       }
     </a>
@@ -231,7 +203,7 @@ function renderEditor({ user, error }, instance) {
             ? '<a class="gitment-editor-logout-link">Logout</a>'
             : user.isLoggingIn
               ? 'Logging in...'
-              : `<a class="gitment-editor-login-link" href="${instance.loginLink}">Login</a> with GitHub`
+              : `<a class="gitment-editor-login-link" href="${instance.loginLink}">Login</a> with Coding.net`
           }
         </div>
       </div>
@@ -245,8 +217,8 @@ function renderEditor({ user, error }, instance) {
       </div>
     </div>
     <div class="gitment-editor-footer">
-      <a class="gitment-editor-footer-tip" href="https://guides.github.com/features/mastering-markdown/" target="_blank">
-        Styling with Markdown is supported
+      <a class="gitment-editor-footer-tip" href="https://github.com/Coding/Comments" target="_blank">
+      Powered by Coding Comments
       </a>
       <button class="gitment-editor-submit" title="${disabledTip}" ${shouldDisable}>Comment</button>
     </div>
@@ -324,8 +296,8 @@ function renderFooter() {
   container.className = 'gitment-container gitment-footer-container'
   container.innerHTML = `
     Powered by
-    <a class="gitment-footer-project-link" href="https://github.com/imsun/gitment" target="_blank">
-      Gitment
+    <a class="gitment-footer-project-link" href="https://github.com/Coding/Comments" target="_blank">
+      Coding Comments
     </a>
   `
   return container
@@ -338,7 +310,7 @@ function render(state, instance) {
   container.appendChild(instance.renderHeader(state, instance))
   container.appendChild(instance.renderComments(state, instance))
   container.appendChild(instance.renderEditor(state, instance))
-  container.appendChild(instance.renderFooter(state, instance))
+  // container.appendChild(instance.renderFooter(state, instance))
   return container
 }
 
