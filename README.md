@@ -3,7 +3,7 @@
 ## 简介
 
 静态博客是一种优雅地博客部署方式，但其一个痛点是难以在页面上与读者互动。
-[gitment](https://imsun.net/posts/gitment-introduction/) hack 了 Oauth 流程，使用 GitHub Issues 的 OpenAPI 实现这样功能。
+[gitment](https://imsun.net/posts/gitment-introduction/) hack 了 OAuth 流程，使用 GitHub Issues 的 OpenAPI 实现这样功能。
 只用创建一个 OAuth App，然后作为 JS 插件引入就好，真的很方便。
 除了 GitHub 服务器在境外（所以有点慢）之外，别的都挺好的。
 
