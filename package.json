@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/Coding/Comments",
   "scripts": {
-    "build": "babel src --out-dir dist --ignore test.js --source-maps & NODE_ENV=production webpack --config webpack.config.js --progress --profile --colors",
+    "build": "babel src --out-dir dist --ignore test.js --source-maps && NODE_ENV=production webpack --config webpack.config.js --progress --profile --colors && cp style/default.css dist/browser",
     "dev": "webpack-dev-server --config webpack.dev.config.js --host 0.0.0.0 --progress --profile --colors"
   },
   "devDependencies": {
@@ -32,7 +32,8 @@
     "webpack-dev-server": "^2.4.2"
   },
   "dependencies": {
-    "mobx": "^3.1.7"
+    "mobx": "^3.1.7",
+    "uglifyjs-webpack-plugin": "^0.4.6"
   },
   "contributors": [
     {
