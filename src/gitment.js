@@ -156,12 +156,14 @@ class Gitment {
   }
 
   createIssue() {
-    const { id, owner, repo, title, link, desc, labels } = this
+    const { id, owner, repo, title, link, desc, labels, author, theme } = this
 
     return http.post(`/api/user/${owner}/project/${repo}/topics`, {
       title,
       labels: labels.concat(['gitment', id]),
       content: `${link}\n\n${desc}`,
+      author,
+      theme,
     })
       .then((meta) => {
         this.state.meta = meta
@@ -176,8 +178,9 @@ class Gitment {
   }
 
   post(content) {
+    const { author, theme } = this
     return this.getIssue()
-      .then(issue => http.post(issue.comments_url, { content }, ''))
+      .then(issue => http.post(issue.comments_url, { content, author, theme }, ''))
       .then(data => {
         this.state.meta.comments++
         const pageCount = Math.ceil(this.state.meta.comments / this.perPage)
@@ -252,7 +255,9 @@ class Gitment {
       return Promise.reject()
     }
 
-    return http.post(`${this.state.meta.comments_url}/${commentId}/upvote`)
+    const { author, theme } = this;
+
+    return http.post(`${this.state.meta.comments_url}/${commentId}/upvote`, { author, theme })
       .then(() => {
         return this.update()
 
@@ -262,10 +267,9 @@ class Gitment {
   unlikeAComment(commentId) {
     if (!this.accessToken) return Promise.reject()
 
-    const comment = this.state.comments.find(comment => comment.id === commentId)
-      console.log(comment)
+    const { author, theme } = this;
 
-    return http.delete(`${this.state.meta.comments_url}/${commentId}/upvote`)
+    return http.delete(`${this.state.meta.comments_url}/${commentId}/upvote`, { author, theme })
       .then(() => {
         return this.update()
       })

@@ -87,7 +87,7 @@ function ajaxFactory(method) {
             req.setRequestHeader('Authorization', `access_token ${token}`)
         }
     }
-    if (method !== 'GET' && method !== 'DELETE') {
+    if (method !== 'GET') {
       body = JSON.stringify(data)
       req.setRequestHeader('Content-Type', 'application/json')
     }

@@ -6,6 +6,11 @@ if (!config) {
   throw new Error('You need your own config to run this test.')
 }
 
+Object.assign(config, {
+  author: 'i@wusisu.com',
+  theme: 'localhsot',
+})
+
 const gitment = new Gitment(config)
 
 gitment.render('container')
