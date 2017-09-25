@@ -4,6 +4,7 @@ export const LS_USER_KEY = 'gitment-user-info'
 export const NOT_INITIALIZED_ERROR = new Error('Comments Not Initialized')
 
 const baseUrl = 'https://coding.net'
+// const baseUrl = 'http://coding.com'
 
 export const CODING_URL = {
     oauth: baseUrl + '/oauth_authorize.html',
