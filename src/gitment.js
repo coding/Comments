@@ -171,9 +171,10 @@ class Gitment {
     const { owner, repo, title, link, desc, labels, author, theme } = this
 
     const identity = this.getIdentity()
+    
 
     return http.post(`/api/user/${owner}/project/${repo}/topics`, {
-      title,
+      title: title.length > 63 ? title.substring(0, 60) + '...' : title,
       labels: labels.concat(['gitment', identity]),
       content: `${link}\n\n${desc}`,
       author,
