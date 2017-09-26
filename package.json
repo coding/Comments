@@ -32,6 +32,7 @@
     "webpack-dev-server": "^2.4.2"
   },
   "dependencies": {
+    "md5": "^2.2.1",
     "mobx": "^3.1.7",
     "uglifyjs-webpack-plugin": "^0.4.6"
   },
