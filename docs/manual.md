@@ -34,7 +34,7 @@ coding_comments:
 - oauth.{client_id & client_secret}: 你[注册的 oauth app](#注册 oauth app) 的秘钥。
 
 ### 注册 oauth app
-访问[应用管理页](http://coding.com/user/account/setting/applications)，点击添加应用。
+访问[应用管理页](https://coding.net/user/account/setting/applications)，点击添加应用。
 ![点击添加应用](https://dn-coding-net-production-pp.qbox.me/1dee41b7-4ea0-45fe-8e7a-53d0f63cf521.png)
 
 填写应用信息，值得注意的是，『回调地址』必须为你的访问的地址，这个是处于安全性的考虑。
