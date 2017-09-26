@@ -1,4 +1,4 @@
-import { coding as codingIcon, heart as heartIcon, spinner as spinnerIcon } from '../icons'
+import { coding as codingIcon, heart as heartIcon, reply as replyIcon, spinner as spinnerIcon } from '../icons'
 import { NOT_INITIALIZED_ERROR } from '../constants'
 
 function renderHeader({ meta, user, reactions }, instance) {
@@ -91,6 +91,7 @@ function renderComments({ meta, comments, commentReactions, currentPage, user, e
           commented on
           <span title="${createDate}">${createDate.toDateString()}</span>
           <div class="gitment-comment-like-btn">${heartIcon} ${comment.up_vote_counts || ''}</div>
+          <div class="gitment-comment-reply-btn">${replyIcon}</div>
         </div>
         <div class="gitment-comment-body gitment-markdown">${comment.content}</div>
       </div>
