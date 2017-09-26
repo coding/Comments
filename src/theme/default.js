@@ -270,7 +270,8 @@ function renderEditor({ user, error }, instance) {
   }
 
   const submitButton = container.querySelector('.gitment-editor-submit')
-  submitButton.onclick = () => {
+
+  const doSubmit = () => {
     submitButton.innerText = 'Submitting...'
     submitButton.setAttribute('disabled', true)
     instance.post(textarea.value.trim())
@@ -285,6 +286,15 @@ function renderEditor({ user, error }, instance) {
         submitButton.removeAttribute('disabled')
         submitButton.innerText = 'Comment'
       })
+  }
+
+  submitButton.onclick = doSubmit
+
+  textarea.onkeydown = (e) => {
+    if ((e.ctrlKey || e.metaKey) && (e.keyCode == 13 || e.keyCode == 10)) {
+      e.preventDefault()
+      doSubmit()
+    }
   }
 
   return container

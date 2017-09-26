@@ -9,6 +9,8 @@ import {
 import { getTargetContainer, http, Query } from './utils'
 import defaultTheme from './theme/default'
 
+import md5 from 'md5'
+
 const scope = 'project:topics,user'
 
 function extendRenderer(instance, renderer) {
@@ -64,6 +66,7 @@ class Gitment {
       oauth: {},
       perPage: 20,
       maxCommentHeight: 250,
+      labelUsingHash: false,
     }, options)
 
     this.useTheme(this.theme)
@@ -155,12 +158,24 @@ class Gitment {
     })
   }
 
+  getIdentity() {
+    const { id, labelUsingHash } = this
+    let identity = id;
+    if (labelUsingHash || identity.length > 200) {
+      identity = md5(identity)
+    }
+    return identity
+  }
+
   createIssue() {
-    const { id, owner, repo, title, link, desc, labels, author, theme } = this
+    const { owner, repo, title, link, desc, labels, author, theme } = this
+
+    const identity = this.getIdentity()
+    
 
     return http.post(`/api/user/${owner}/project/${repo}/topics`, {
-      title,
-      labels: labels.concat(['gitment', id]),
+      title: title.length > 63 ? title.substring(0, 60) + '...' : title,
+      labels: labels.concat(['gitment', identity]),
       content: `${link}\n\n${desc}`,
       author,
       theme,
@@ -193,10 +208,10 @@ class Gitment {
   }
 
   loadMeta() {
-    const { id, owner, repo } = this
+    const { owner, repo } = this
     return http.get(`/api/user/${owner}/project/${repo}/topics`, {
         creator: owner,
-        labels: id,
+        labels: this.getIdentity(),
       })
       .then(issues => {
         if (!issues.length) return Promise.reject(NOT_INITIALIZED_ERROR)
