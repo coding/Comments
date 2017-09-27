@@ -1,4 +1,9 @@
-import { coding as codingIcon, heart as heartIcon, reply as replyIcon, spinner as spinnerIcon } from '../icons'
+import {
+  coding as codingIcon,
+  heart as heartIcon,
+  reply as replyIcon,
+  spinner as spinnerIcon,
+} from '../icons'
 import { NOT_INITIALIZED_ERROR } from '../constants'
 
 function renderHeader({ meta, user, reactions }, instance) {
@@ -108,6 +113,24 @@ function renderComments({ meta, comments, commentReactions, currentPage, user, e
     } else {
       likeButton.classList.remove('liked')
       likeButton.onclick = () => instance.likeAComment(comment.id)
+    }
+
+    const replyButton = commentItem.querySelector('.gitment-comment-reply-btn')
+    replyButton.onclick = () => {
+      //Finds y value of given object
+      function findPos(obj) {
+        var curtop = 0;
+        if (obj.offsetParent) {
+            do {
+                curtop += obj.offsetTop;
+            } while (obj = obj.offsetParent);
+        return curtop;
+        }
+      }
+      const writeField = container.parentElement.parentElement.querySelector('.gitment-editor-write-field')
+      const textarea = writeField.querySelector('textarea')
+      textarea.value += '@' + comment.owner.global_key + ' '
+      window.scrollTo(0, findPos(textarea))
     }
 
     // dirty
