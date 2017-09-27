@@ -131,6 +131,7 @@ function renderComments({ meta, comments, commentReactions, currentPage, user, e
       const textarea = writeField.querySelector('textarea')
       textarea.value += '@' + comment.owner.global_key + ' '
       window.scrollTo(0, findPos(textarea))
+      textarea.focus()
     }
 
     // dirty
