@@ -161,7 +161,7 @@ function renderComments({ meta, comments, commentReactions, currentPage, user, e
   container.appendChild(commentsList)
 
   if (meta) {
-    const pageCount = Math.ceil(meta.comments / instance.perPage)
+    const pageCount = Math.ceil(meta.child_count / instance.perPage)
     if (pageCount > 1) {
       const pagination = document.createElement('ul')
       pagination.className = 'gitment-comments-pagination'

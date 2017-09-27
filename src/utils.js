@@ -82,7 +82,7 @@ function ajaxFactory(method) {
 
     req.setRequestHeader('Accept', 'application/vnd.github.squirrel-girl-preview, application/vnd.github.html+json, application/json')
     if (!url.startsWith('https://api.github.com')) {
-        req.setRequestHeader('X-API-VERSION', 'v2')
+        req.setRequestHeader('X-API-Version', 'v2')
         if (token) {
             req.setRequestHeader('Authorization', `access_token ${token}`)
         }
