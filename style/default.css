@@ -217,6 +217,7 @@ a.gitment-comment-name:visited {
 
 button.gitment-editor-tab {
   display: inline-block;
+  margin: 0;
   padding: 11px 12px;
   font-size: 14px;
   line-height: 20px;
@@ -227,11 +228,9 @@ button.gitment-editor-tab {
   border-style: solid;
   border-color: transparent;
   border-radius: 0;
-
   white-space: nowrap;
   cursor: pointer;
   user-select: none;
-
   outline: none;
 }
 
