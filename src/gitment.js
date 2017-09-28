@@ -67,6 +67,7 @@ class Gitment {
       perPage: 20,
       maxCommentHeight: 250,
       labelUsingHash: false,
+      lang: 'zh-CN',
     }, options)
 
     this.useTheme(this.theme)
