@@ -8,7 +8,7 @@ if (!config) {
 
 Object.assign(config, {
   author: 'i@wusisu.com',
-  theme: 'localhsot',
+  blog_theme: 'localhsot',
 })
 
 const gitment = new Gitment(config)
