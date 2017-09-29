@@ -7,6 +7,41 @@ import {
 } from '../icons'
 import { NOT_INITIALIZED_ERROR } from '../constants'
 
+function renderInit({ meta, user, error }, instance) {
+  const container = document.createElement('div')
+  container.lang = instance.lang
+  container.className = 'gitment-container gitment-init-container'
+
+  if (error) {
+    const errorBlock = document.createElement('div')
+    errorBlock.className = 'gitment-init-error'
+
+    if (error === NOT_INITIALIZED_ERROR
+      && user.login
+      && user.login.toLowerCase() === instance.owner.toLowerCase()) {
+      const initHint = document.createElement('div')
+      const initButton = document.createElement('button')
+      initButton.className = 'gitment-init-btn'
+      initButton.onclick = () => {
+        initButton.setAttribute('disabled', true)
+        instance.init()
+          .catch(e => {
+            initButton.removeAttribute('disabled')
+            alert(e)
+          })
+      }
+      initButton.innerText = '初始化讨论'
+      initHint.appendChild(initButton)
+      errorBlock.appendChild(initHint)
+    } else {
+      errorBlock.innerText = error
+    }
+    container.appendChild(errorBlock)
+    return container
+  }
+  return container
+}
+
 function renderHeader({ meta, user, reactions }, instance) {
   const container = document.createElement('div')
   container.lang = instance.lang
@@ -39,32 +74,10 @@ function renderComments({ meta, comments, commentReactions, currentPage, user, e
   container.className = 'gitment-container gitment-comments-container'
 
   if (error) {
-    const errorBlock = document.createElement('div')
-    errorBlock.className = 'gitment-comments-error'
-
-    if (error === NOT_INITIALIZED_ERROR
-      && user.login
-      && user.login.toLowerCase() === instance.owner.toLowerCase()) {
-      const initHint = document.createElement('div')
-      const initButton = document.createElement('button')
-      initButton.className = 'gitment-comments-init-btn'
-      initButton.onclick = () => {
-        initButton.setAttribute('disabled', true)
-        instance.init()
-          .catch(e => {
-            initButton.removeAttribute('disabled')
-            alert(e)
-          })
-      }
-      initButton.innerText = '初始化讨论'
-      initHint.appendChild(initButton)
-      errorBlock.appendChild(initHint)
-    } else {
-      errorBlock.innerText = error
-    }
-    container.appendChild(errorBlock)
     return container
-  } else if (comments === undefined) {
+  }
+
+  if (comments === undefined) {
     const loading = document.createElement('div')
     loading.innerText = '加载评论中...'
     loading.className = 'gitment-comments-loading'
@@ -346,6 +359,7 @@ function render(state, instance) {
   const container = document.createElement('div')
   container.lang = instance.lang
   container.className = 'gitment-container gitment-root-container'
+  container.appendChild(instance.renderInit(state, instance))
   container.appendChild(instance.renderEditor(state, instance))
   container.appendChild(instance.renderHeader(state, instance))
   container.appendChild(instance.renderComments(state, instance))
@@ -353,4 +367,4 @@ function render(state, instance) {
   return container
 }
 
-export default { render, renderHeader, renderComments, renderEditor, renderFooter }
+export default { render, renderInit, renderHeader, renderComments, renderEditor, renderFooter }
