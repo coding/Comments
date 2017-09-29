@@ -194,9 +194,9 @@ class Gitment {
   }
 
   post(content) {
-    const { author, theme } = this
+    const { author, blog_theme } = this
     return this.getIssue()
-      .then(issue => http.post(issue.comments_url, { content, author, theme }, ''))
+      .then(issue => http.post(issue.comments_url, { content, author, theme: blog_theme }, ''))
       .then(data => {
         this.state.meta.comments++
         const pageCount = Math.ceil(this.state.meta.comments / this.perPage)
@@ -271,9 +271,9 @@ class Gitment {
       return Promise.reject()
     }
 
-    const { author, theme } = this;
+    const { author, blog_theme } = this;
 
-    return http.post(`${this.state.meta.comments_url}/${commentId}/upvote`, { author, theme })
+    return http.post(`${this.state.meta.comments_url}/${commentId}/upvote`, { author, theme: blog_theme })
       .then(() => {
         return this.update()
 
@@ -283,9 +283,9 @@ class Gitment {
   unlikeAComment(commentId) {
     if (!this.accessToken) return Promise.reject()
 
-    const { author, theme } = this;
+    const { author, blog_theme } = this;
 
-    return http.delete(`${this.state.meta.comments_url}/${commentId}/upvote`, { author, theme })
+    return http.delete(`${this.state.meta.comments_url}/${commentId}/upvote`, { author, theme: blog_theme })
       .then(() => {
         return this.update()
       })
