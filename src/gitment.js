@@ -169,7 +169,7 @@ class Gitment {
   }
 
   createIssue() {
-    const { owner, repo, title, link, desc, labels, author, theme } = this
+    const { owner, repo, title, link, desc, labels, author, blog_theme } = this
 
     const identity = this.getIdentity()
     
@@ -179,7 +179,7 @@ class Gitment {
       labels: labels.concat(['gitment', identity]),
       content: `${link}\n\n${desc}`,
       author,
-      theme,
+      theme: blog_theme,
     })
       .then((meta) => {
         this.state.meta = meta
