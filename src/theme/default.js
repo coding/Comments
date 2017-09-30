@@ -314,19 +314,19 @@ function renderEditor({ user, error }, instance) {
   const submitButton = container.querySelector('.gitment-editor-submit')
 
   const doSubmit = () => {
-    submitButton.innerText = 'Submitting...'
+    submitButton.innerText = '提交中...'
     submitButton.setAttribute('disabled', true)
     instance.post(textarea.value.trim())
       .then(data => {
         textarea.value = ''
         textarea.style.height = 'auto'
         submitButton.removeAttribute('disabled')
-        submitButton.innerText = 'Comment'
+        submitButton.innerText = '评论'
       })
       .catch(e => {
         alert(e)
         submitButton.removeAttribute('disabled')
-        submitButton.innerText = 'Comment'
+        submitButton.innerText = '评论'
       })
   }
 
