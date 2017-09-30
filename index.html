@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="cn">
+<head>
+  <meta charset="UTF-8">
+  <title>Coding Comments Demo Page</title>
+  <meta name="viewport" content="width=640, user-scalable=no">
+  <link rel="stylesheet" href="./test/style.css">
+  <link rel="stylesheet" href="./style/default.css">
+</head>
+<body>
+  <div>
+    <h1>Coding Comments Demo</h1>
+    <p>This is the demo page for <a href="https://github.com/Coding/Comments" target="_blank">Coding Comments</a>.</p>
+    <p>You can login with GitHub and leave your comments below.</p>
+  </div>
+  <div id="container"></div>
+
+  <script src="./dist/browser/gitment.min.js"></script>
+  <script>
+    var clientId = '9dd07bfea38c5970479bb233f2e82618'
+    var clientSecret = 'c9d27d9b0497e2f547ecec8769058a6b069bec99'
+    var gitment = new Gitment({
+      id: 'demo page',
+      owner: 'wusisu',
+      repo: 'wusisu',
+      oauth: {
+        client_id: clientId,
+        client_secret: clientSecret,
+      },
+    })
+
+    gitment.render('container')
+  </script>
+</body>
+</html>
