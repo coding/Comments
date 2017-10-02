@@ -41,7 +41,7 @@ coding_comments:
 创建成功后，即可获得你的 client_id 和 client_secret
 ![成功](https://dn-coding-net-production-pp.qbox.me/e9f37b96-eb36-4711-b46d-01bc127e408b.png)
 
-## 开发主题 & 静态页面使用
+## 开发主题 
 
 配置内容看[配置项说明](#配置项说明)。
 
@@ -56,6 +56,14 @@ coding_comments:
 
 我用以[黄玄的博客](http://huangxuan.me/)作为例子，演示[如何增加 Coding Comments 的支持](https://github.com/wusisu/huxpro.github.io/commit/9a8afd49807d3e696569f6988a5b0a38029a10da)。
 
+这里有个某 Coding 核心开发 [囧老师](https://coding.net/u/jiong) 花了十来分钟[在其 Demo Blog 实现的 Coding Comments](https://coding.net/u/jiong/p/jiong/git/compare/17f6676efcfd875aee530abf716f6cf48ba77c86...2a6d9f14362983f613a25b3b9bb9b97525cd3b38?tab=2)。
+
+## 静态页面使用
+配置内容看[配置项说明](#配置项说明)。
+
+案例可以看 [Demo Page](https://coding.github.io/Comments/) 的[代码实现](https://github.com/Coding/Comments/blob/bd905ac2e6d15ae16de0c023c7ec37666ab4417f/index.html)。
+
+script 的引用可以看最新的 [release](https://github.com/Coding/Comments/releases)。
 
 ## 开发插件
 
@@ -66,22 +74,3 @@ coding_comments:
 
 ### build
 `yarn build`
-
-<div id="coding_comments_thread"></div>
-<link rel="stylesheet" href="//dn-coding-net-public-file.qbox.me/Coding-Comments/v0.0.3/default.css">
-<script type="text/javascript" src="//dn-coding-net-public-file.qbox.me/Coding-Comments/v0.0.3/gitment.min.js"></script>
-<script type="text/javascript">
-    (function() {
-      const gitment = new Gitment({
-        owner: 'wusisu',
-        repo: 'wusisu,
-        oauth: {
-          client_id: '79a48ea5cbf75f8deadd30ead1093998',
-          client_secret: 'b87501f3c5c4ee6b277426fdaa65279de21d6ab5',
-        },
-          author: 'i@wusisu.com', // how to contact with you
-          theme: 'https://github.com/Coding/Comments' // where to download this blog's theme
-		})
-		document.getElementById('coding_comments_thread').appendChild(gitment.render())
-    })();
-</script>
