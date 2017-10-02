@@ -1,5 +1,7 @@
 # Coding Comments
 
+[Demo Page](https://coding.github.io/Comments/)
+
 [快速开始](docs/manual.md)
 
 ## 简介

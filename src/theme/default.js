@@ -161,7 +161,7 @@ function renderComments({ meta, comments, commentReactions, currentPage, user, e
       if (markdownBody.clientHeight > instance.maxCommentHeight) {
         markdownBody.classList.add('gitment-comment-body-folded')
         markdownBody.style.maxHeight = instance.maxCommentHeight + 'px'
-        markdownBody.title = 'Click to Expand'
+        markdownBody.title = '展开评论'
         markdownBody.onclick = () => {
           markdownBody.classList.remove('gitment-comment-body-folded')
           markdownBody.style.maxHeight = ''
