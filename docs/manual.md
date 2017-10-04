@@ -16,9 +16,9 @@
 在 `_config.yml` 文件中，`coding_comments` 配置类似如下
 ```yml
 coding_comments:
-  owner: 'wusisu'
-  repo: 'wusisu'
-  oauth: 
+  user: 'wusisu'
+  project: 'wusisu'
+  oauth:
     client_id: '562b3b6b49cadee03464d430c9ccd7c0'
     client_secret: 'bada319fff24ae2e91f2800340cdc0dcfe85fdf7'
 ```
@@ -57,6 +57,8 @@ coding_comments:
 我用以[黄玄的博客](http://huangxuan.me/)作为例子，演示[如何增加 Coding Comments 的支持](https://github.com/wusisu/huxpro.github.io/commit/9a8afd49807d3e696569f6988a5b0a38029a10da)。
 
 这里有个某 Coding 核心开发 [囧老师](https://coding.net/u/jiong) 花了十来分钟[在其 Demo Blog 实现的 Coding Comments](https://coding.net/u/jiong/p/jiong/git/compare/17f6676efcfd875aee530abf716f6cf48ba77c86...2a6d9f14362983f613a25b3b9bb9b97525cd3b38?tab=2)。
+
+这是我照虎画猫在我的博客上[添加了 coding comments](https://coding.net/u/wusisu/p/wusisu.com/git/commit/bbbf8af8c968742f386b09ca210db392040d088e)。
 
 ## 静态页面使用
 配置内容看[配置项说明](#配置项说明)。
