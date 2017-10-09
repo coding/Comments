@@ -70,6 +70,21 @@ script 的引用可以看最新的 [release](https://github.com/Coding/Comments/
 ## 开发插件
 
 ### dev
+
+创建 `test/config.js`
+内容为：
+```js
+window.config = {
+  owner: 'wusisu',
+  repo: 'wusisu',
+  oauth: {
+    client_id: '562b3b6b49cadee03464d430c9ccd7c0',
+    client_secret: 'bada319fff24ae2e91f2800340cdc0dcfe85fdf7'
+  }
+}
+```
+然后
+
 `yarn && yarn dev`
 
 访问 http://127.0.0.1:3000/test/gitment.html
