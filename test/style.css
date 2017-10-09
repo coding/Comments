@@ -1,11 +1,98 @@
 body {
-  padding: 0 20px;
-  margin: 0 auto;
-  font-family: sans-serif;
+	padding: 0;
+	margin: 0 auto;
+	font-family: sans-serif;
 }
 
-@media (min-width: 780px) {
-  body {
-    max-width: 760px;
-  }
+a, a:link, a:hover {
+	color: #2196F3;
+	text-decoration: none;
+}
+
+#demo, #content {
+	max-width: 760px;
+	margin: 0 auto;
+}
+
+#main {
+	width: 100%;
+	padding: 40px 0 0;
+	text-align: center;
+	background: #4B277E;
+	color: #fff;
+}
+
+#header {
+	text-align: center;
+	width: 100%;
+}
+
+#header .logo {
+	max-width: 920px;
+	margin: 0 auto;
+	text-align: left;
+	margin-bottom: 80px;
+}
+
+#header .logo img {
+	max-width: 150px;
+	margin-left: 40px;
+}
+
+#header .title {
+	width: 100%;
+	max-width: 800px;
+	transform: scale(1.2);
+	animation: scale 1s;
+}
+
+@keyframes scale {
+	0% {
+		transform: scale(0.6);
+	}
+
+	100% {
+		transform: scale(1.2);
+	}
+
+}
+
+#header h1 {
+	display: none;
+}
+
+#content {
+	margin-top: 100px;
+	background: #4B277E;
+	padding: 40px;
+	border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#content p {
+	line-height: 2;
+	text-align: left;
+	margin-bottom: 2em;
+	font-size: 16px;
+	font-weight: 200;
+}
+
+.project-button {
+	margin: 60px auto 40px;
+}
+
+.project-button a {
+	padding: 16px 40px;
+	color: #fff;
+	border: 1px solid rgba(255, 255, 255, 0.5);
+	border-radius: 4px;
+}
+
+.project-button a:hover {
+	background-color: #0c7bd4;
+	color: #fff;
+	border: none;
+}
+
+#demo {
+	padding: 40px;
 }

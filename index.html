@@ -5,31 +5,58 @@
   <title>Coding Comments Demo Page</title>
   <meta name="viewport" content="width=640, user-scalable=no">
   <link rel="stylesheet" href="./test/style.css">
-  <link rel="stylesheet" href="./style/default.css">
-</head>
+  <link rel="stylesheet" href="./style/default.css"></head>
 <body>
-  <div>
-    <h1>Coding Comments Demo</h1>
-    <p>This is the demo page for <a href="https://github.com/Coding/Comments" target="_blank">Coding Comments</a>.</p>
-    <p>You can login with <a href="https://coding.net" target="_blank">Coding.net</a> and leave your comments below.</p>
+  <div id="main">
+    <div id="header">
+      <div class="logo">
+        <img src="https://dn-coding-net-production-pp.qbox.me/49f173f1-1127-41c9-acb2-d2694a542180.png" />
+      </div>
+      <img class="title" src="https://dn-coding-net-production-pp.qbox.me/208cf0e1-0053-44c5-9cdc-f22208af1b8c.png" />
+      <h1>Coding Comments Demo</h1>
+    </div>
+    <div id="content">
+      <p>
+        静态博客是一种优雅地博客部署方式，但其一个痛点是难以在页面上与读者互动。
+        <a href="https://imsun.net/posts/gitment-introduction/">gitment</a>
+        hack 了 OAuth 流程，使用 GitHub Issues 的 OpenAPI 实现这样的功能。 只用创建一个 OAuth App，然后作为 JS 插件引入就好，真的很方便。 除了 GitHub 服务器在境外（所以有点慢）之外，别的都挺好的。
+      </p>
+
+      <p> <strong>Coding Comments</strong>
+        是一个依托 Coding.net 的版本，使用
+        <a href="https://coding.net">Coding.net</a>
+        账号体系与项目讨论功能实现的评论功能，具有更好的体验。
+      </p>
+      <div class="project-button" >
+        <a href="https://github.com/Coding/Comments">查看项目</a>
+      </div>
+    </div>
   </div>
-  <div id="container"></div>
+  <div id="demo">
+    <h2>Demo</h2>
+    <p>
+      登录
+      <a href="https://coding.net" target="_blank">Coding.net</a>
+      并在下方留下您的评论。
+    </p>
+    <div id="container"></div>
+  </div>
 
   <script src="./dist/browser/gitment.min.js"></script>
   <script>
-    var clientId = '9dd07bfea38c5970479bb233f2e82618'
-    var clientSecret = 'c9d27d9b0497e2f547ecec8769058a6b069bec99'
-    var gitment = new Gitment({
-      id: 'demo page',
-      owner: 'wusisu',
-      repo: 'wusisu',
-      oauth: {
-        client_id: clientId,
-        client_secret: clientSecret,
-      },
-    })
+      var clientId = '9dd07bfea38c5970479bb233f2e82618'
+      var clientSecret = 'c9d27d9b0497e2f547ecec8769058a6b069bec99'
+      var gitment = new Gitment({
+        id: 'demo page',
+        owner: 'wusisu',
+        repo: 'wusisu',
+        oauth: {
+          client_id: clientId,
+          client_secret: clientSecret,
+        },
+      })
 
-    gitment.render('container')
-  </script>
+      gitment.render('container')
+    </script>
 </body>
 </html>
