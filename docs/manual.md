@@ -16,8 +16,8 @@
 在 `_config.yml` 文件中，`coding_comments` 配置类似如下
 ```yml
 coding_comments:
-  user: 'wusisu'
-  project: 'wusisu'
+  owner: 'wusisu'
+  repo: 'wusisu'
   oauth:
     client_id: '562b3b6b49cadee03464d430c9ccd7c0'
     client_secret: 'bada319fff24ae2e91f2800340cdc0dcfe85fdf7'
