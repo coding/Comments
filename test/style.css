@@ -50,7 +50,7 @@ a:hover {
 	width: 100%;
 	max-width: 800px;
 	transform: scale(1.2);
-	animation: scale 1s;
+	animation: scale 2s cubic-bezier(0,.3,.3,1);
 }
 
 @keyframes scale {
@@ -103,4 +103,12 @@ a:hover {
 
 #demo {
 	padding: 30px;
+}
+
+#demo h2 {
+	color: #3A2A54;
+}
+
+#demo p {
+	color: #333;
 }
