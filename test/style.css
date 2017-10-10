@@ -38,7 +38,7 @@ a:hover {
 	max-width: 920px;
 	margin: 0 auto;
 	text-align: left;
-	margin-bottom: 80px;
+	margin-bottom: 20px;
 }
 
 #header .logo img {
@@ -48,9 +48,21 @@ a:hover {
 
 #header .title {
 	width: 100%;
+	overflow-x: hidden;
+	padding: 7% 0;
+}
+
+@media (min-width:800px) {
+	#header .title {
+		padding: 56px 0;
+	}
+}
+
+#header .title img {
+	width: 100%;
 	max-width: 800px;
 	transform: scale(1.2);
-	animation: scale 2s cubic-bezier(0,.3,.3,1);
+	animation: scale 2s cubic-bezier(0, .3, .3, 1);
 }
 
 @keyframes scale {
@@ -64,12 +76,12 @@ a:hover {
 
 }
 
-#header h1, #header p {
+#header .title h1, #header .title p {
 	display: none;
 }
 
 #content {
-	margin-top: 100px;
+	margin-top: 40px;
 	background: #4B277E;
 	padding: 30px;
 	border-top: 1px solid rgba(255, 255, 255, 0.1);
